@@ -3,8 +3,8 @@
   <spriteName>spr_VikingIdle</spriteName>
   <solid>-1</solid>
   <visible>-1</visible>
-  <depth>0</depth>
-  <persistent>0</persistent>
+  <depth>-10</depth>
+  <persistent>-1</persistent>
   <parentName>obj_Player</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
@@ -26,7 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>event_inherited();
-hp = 10000
+hp = 100
+
 </string>
           </argument>
         </arguments>
@@ -75,7 +76,8 @@ axe.direction = point_direction(x,y,mouse_x, mouse_y) + irandom_range(-3,3)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Mouse Movement and 
+            <string>event_inherited();
+//Mouse Movement and 
 mouse_old_x = x 
 mouse_old_y = y 
 if ( mouse_old_x != mouse_x ) or ( mouse_old_y != mouse_y ) {
@@ -118,6 +120,10 @@ else if (180&lt;  mouse_direction &amp;&amp; mouse_direction &lt; 270)
 sprite_index = spr_VikingIdleLeftDown
 
 }
+if (hp &lt; 0)
+{
+room_goto(rm_Lost)
+}
 </string>
           </argument>
         </arguments>
@@ -142,9 +148,32 @@ sprite_index = spr_VikingIdleLeftDown
             <kind>1</kind>
             <string>if (alarm[0] = -1 ) 
 {
-alarm = 20
+alarm = 10
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>draw_text(32,32,hp)
 </string>
           </argument>
         </arguments>

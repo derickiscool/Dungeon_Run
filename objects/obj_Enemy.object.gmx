@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>-1</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1000</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -31,6 +31,9 @@
 start_x = x
 start_y = y 
 current_state = states.patrol
+
+cellSize = 16
+myPath = path_add();
 </string>
           </argument>
         </arguments>
@@ -66,16 +69,41 @@ else
 image_xscale=1;
 }
 
+
+
 //gets player position and direction
 player_x = obj_Player.x
 player_y = obj_Player.y
 
 
-if (hp == 0) 
+if (hp ==0) 
 {
     current_state = states.death
     
 }
+//Create grid
+grid = mp_grid_create(0,0,room_width/cellSize, room_height/cellSize, cellSize, cellSize)
+mp_grid_add_instances(grid, obj_Wall,false);
+//IF HIT
+if (instance_place(x,y,obj_PlayerHit))
+{
+    current_state = states.hit
+}
+if (current_state == states.patrol)
+{
+    if (path_index =-1)
+    {
+        if (mp_grid_path(grid,myPath,x,y,x+4,y+16,true))
+        {
+            path_start(myPath, 1, path_action_reverse, true)
+        
+        }
+    }
+
+}
+
+
+
 </string>
           </argument>
         </arguments>

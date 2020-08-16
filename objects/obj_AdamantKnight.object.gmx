@@ -3,8 +3,8 @@
   <spriteName>spr_AdamantKnight</spriteName>
   <solid>-1</solid>
   <visible>-1</visible>
-  <depth>0</depth>
-  <persistent>0</persistent>
+  <depth>-10</depth>
+  <persistent>-1</persistent>
   <parentName>obj_Enemy</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
@@ -28,6 +28,75 @@
             <string>///Initialization
 event_inherited();
 hp = 5
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="3">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>image_alpha = 1
+if (hp&gt;0)
+{
+    current_state = states.chase
+}
+else{
+    current_state = states.death 
+
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///POKE POKE
+
+
+dir = point_direction(x,y,player_x,player_y)
+if (dir&lt;270 &amp;&amp; dir&gt;90)
+{ 
+sword = instance_create(x-20,y,obj_AdamantKnighthitBox)
+sword.direction = point_direction(x,y,player_x,player_y)
+}
+else
+{
+sword = instance_create(x+20,y,obj_AdamantKnighthitBox)
+sword.direction = point_direction(x,y,player_x,player_y)
+} 
+
 </string>
           </argument>
         </arguments>
@@ -51,6 +120,7 @@ hp = 5
           <argument>
             <kind>1</kind>
             <string>///GOODBYE WORLD
+
 instance_destroy()
 </string>
           </argument>
@@ -74,11 +144,45 @@ instance_destroy()
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///HIT
+
+if (current_state == states.hit)
+{
+    speed = 0 
+    image_alpha = 0.3
+    if (alarm[3] = -1)
+    {
+        alarm[3] = 10    
+    
+    }
+
+
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///Initialization 
 
 event_inherited();
 distance = point_distance(x,y,player_x,player_y)
- 
+
 </string>
           </argument>
         </arguments>
@@ -101,13 +205,12 @@ distance = point_distance(x,y,player_x,player_y)
             <kind>1</kind>
             <string>///Patrol 
 if (current_state == states.patrol)
-{
+{   
+    
     image_index = max(20,image_index %30 ) //Walking Animation
     
-    if (path_index = -1)
-    {
-        path_start(path_AdamantKnight, 2, path_action_reverse, false);
-    }
+    
+   
     if (distance &lt;200 &amp;&amp; distance &gt; 60 )
     {
         current_state = states.chase
@@ -140,20 +243,26 @@ if (current_state == states.chase)
 {
     if (distance &lt;200 &amp;&amp; distance &gt; 60) 
     {
-    
+      
         image_index = max(20,image_index %30);
         path_end();
-        mp_potential_step(player_x,player_y,2,true)
+        if (mp_grid_path(grid,myPath,x,y,player_x,player_y,true))
+        {
+            path_start(myPath, 3, path_action_reverse, true)
+        }
         
     }
     else if (distance&lt; 60)
-    {
-        image_index = max(30,image_index % 40); //Charging animation
-        mp_potential_step(player_x,player_y,3,true)
+    {   
+        current_state = states.attack
+        
+        
     }
     else if (distance &gt; 200)
     {
+    
         image_index = max(20,image_index % 30)
+        path_end()
         mp_potential_step(start_x,start_y,1.5,true);
         if (abs(x-start_x) &lt;2 &amp;&amp; abs(y-start_y)&lt;2)
         {
@@ -191,13 +300,49 @@ if (current_state == states.chase)
 
 if (current_state == states.death)
 
-{
-    image_index  = max(41,49 )
+{   
+    image_index  = max(41,image_index%49 )
     speed = 0
     if alarm[0] =-1
     {
-        alarm[0] = 30
+        alarm[0] = 40
     }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///ATTACK
+if (current_state == states.attack)
+
+{
+    image_index = max (31,image_index %41);
+    if (alarm[1] = -1)
+    {
+        alarm[1] = 40
+    }
+    if (distance&gt;60)
+    {
+        current_state = states.patrol 
+    
+    }
+
 }
 </string>
           </argument>

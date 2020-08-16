@@ -13,7 +13,7 @@
     <TextureGroup0>0</TextureGroup0>
   </TextureGroups>
   <For3D>0</For3D>
-  <width>336</width>
-  <height>104</height>
+  <width>160</width>
+  <height>160</height>
   <data>images\ts_Dungeon.png</data>
 </background>

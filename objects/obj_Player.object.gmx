@@ -2,8 +2,8 @@
 <object>
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>-1</solid>
-  <visible>-1</visible>
-  <depth>0</depth>
+  <visible>0</visible>
+  <depth>-10</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>friction=0.5
-
+hp = 100
 </string>
           </argument>
         </arguments>
@@ -71,6 +71,27 @@ else if keyboard_check(ord('D')) and keyboard_check(ord('S'))
 {
 speed = 4 
 direction = 315
+}
+
+//check collisions
+if (scr_grid_place_meeting(x+hspeed,y)) //X COLLSION
+{
+    while (!scr_grid_place_meeting(x+sign(hspeed),y))
+    {
+        x+=sign(hspeed)
+    }
+    hspeed = 0
+
+}
+if (scr_grid_place_meeting(x,y+vspeed)) //Y COLLSION
+{
+    while (!scr_grid_place_meeting(x,y+sign(vspeed)))
+    {
+        y+=sign(vspeed)
+    }
+    vspeed = 0 
+
+
 }
 
 

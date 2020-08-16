@@ -33,8 +33,20 @@ hit = instance_place(x,y,obj_Player)
 
 if (hit != noone)
 {
-hit.hp -=1
+sound_volume(snd_hurt, 0.1)
+audio_play_sound(snd_hurt,0,0)
+hit.hp -=5
 instance_destroy()
+}
+
+if (scr_grid_place_meeting(x,y)) //X COLLSION
+{
+    instance_destroy();
+
+}
+if (scr_grid_place_meeting(x,y)) //Y COLLSION
+{
+  instance_destroy();
 }
 </string>
           </argument>

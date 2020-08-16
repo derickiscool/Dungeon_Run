@@ -4,7 +4,7 @@
   <solid>0</solid>
   <visible>-1</visible>
   <depth>0</depth>
-  <persistent>0</persistent>
+  <persistent>-1</persistent>
   <parentName>obj_Enemy</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
@@ -29,6 +29,7 @@
 event_inherited()
 //Health
 hp = 1
+
 
 </string>
           </argument>
@@ -102,12 +103,10 @@ distance = point_distance(x,y,player_x,player_y)
             <string>///Patrol
 
 if (current_state == states.patrol)
-{  
+{   
+    
     image_index = max(0,image_index % 4)
-    if (path_index =-1)
-    {
-        path_start(path_tinyGang,1.5,path_action_reverse,false)
-    }
+    
     if (distance&lt;150)
     {
         current_state = states.chase
@@ -136,20 +135,26 @@ if (current_state == states.patrol)
             <string>///Chase 
 if (current_state == states.chase)
 {   
+
+    
     if (distance&lt;150)
     {
-        image_index = max(3,image_index % 7)
-        path_end();
-        mp_potential_step(player_x,player_y, 3.5, true) ///Zoom to the enemy 
+        current_state = states.attack
+       
     }
     else if (distance&gt;150)
     {
+        
         image_index = max(0,image_index % 4 )
-        mp_potential_step(start_x,start_y,1.5,true);
-        if (abs(x-start_x)&lt;2 &amp;&amp; abs(y-start_y)&lt;2)
+        if (mp_grid_path(grid,myPath,x,y,start_x,start_y,true))
         {
-            current_state = states.patrol   
+            path_start(myPath, 1.5, path_action_reverse, true)
+            if (abs(x-start_x)&lt;2 &amp;&amp; abs(y-start_y)&lt;2)
+            {
+                current_state = states.patrol   
+            }
         }
+        
        
     }    
     
@@ -180,14 +185,74 @@ if (current_state == states.chase)
 if (current_state == states.death)
 {
     speed = 0
-image_index = 8
+    image_index = max (6, image_index%9)
     if (alarm[0] = -1)
     {
-    
+        
         alarm[0] = 30
     }
 }
 </string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Attack State
+if (current_state == states.attack)
+{
+    
+    path_end();
+    image_index = max(3,image_index % 7)
+    if (mp_grid_path(grid,myPath,x,y,player_x,player_y,true))
+    {
+        path_start(myPath, 3.5, path_action_reverse, true)
+    
+    }
+
+    if (distance&gt;150)
+    {   
+        path_end();
+        current_state = states.chase
+    }
+
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string></string>
           </argument>
         </arguments>
       </action>
@@ -209,7 +274,7 @@ image_index = 8
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>speed = 0
+            <string>speed = 1
 </string>
           </argument>
         </arguments>

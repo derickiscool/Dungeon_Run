@@ -3,9 +3,9 @@
   <spriteName>spr_Axe</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1000</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_PlayerHit</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="3" enumb="0">
@@ -36,6 +36,19 @@ if (hit != noone)
 hit.hp -=1 
 instance_destroy()
 }
+audio_play_sound(snd_axe_,0,0);
+
+
+if (scr_grid_place_meeting(x,y)) //X COLLSION
+{
+    instance_destroy();
+
+}
+if (scr_grid_place_meeting(x,y)) //Y COLLSION
+{
+  instance_destroy();
+}
+
 </string>
           </argument>
         </arguments>
